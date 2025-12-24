@@ -1,11 +1,13 @@
-name: pages
+name: Pages
 
 on:
   push:
     branches: ["main"]
     paths:
       - "docs/**"
-      - ".github/workflows/pages.yml"
+      - "README.md"
+      - "CHANGELOG.md"
+      - "PROMPT_SYSTEM.md"
   workflow_dispatch:
 
 permissions:
@@ -15,7 +17,7 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -23,6 +25,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Generate docs/index.md from README
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          readme = Path('README.md').read_text().rstrip() + '\n'
+          out = Path('docs/index.md')
+          out.parent.mkdir(parents=True, exist_ok=True)
+          out.write_text('---\nlayout: default\ntitle: shellgAIde\n---\n\n' + readme)
+          PY
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -35,15 +47,13 @@ jobs:
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./_site
 
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment

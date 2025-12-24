@@ -1,9 +1,9 @@
-name: release
+name: Release
 
 on:
   push:
     tags:
-      - "v*.*.*"
+      - 'v*.*.*'
 
 permissions:
   contents: write
@@ -15,15 +15,32 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build release archive
+      - name: Build release notes from CHANGELOG
+        shell: bash
         run: |
           set -euo pipefail
           TAG="${GITHUB_REF_NAME}"
-          OUT="shellgAIde-${TAG}.zip"
-          git archive --format=zip --output "${OUT}" "${TAG}"
-          echo "OUT=${OUT}" >> "$GITHUB_ENV"
+          VER="${TAG#v}"
+          OUT="RELEASE_NOTES.md"
+
+          echo "# ${TAG}" > "${OUT}"
+          echo "" >> "${OUT}"
+
+          awk -v ver="${VER}" '
+            $0 ~ "^## \[[0-9]" { }
+            $0 ~ "^## \["ver"\]" { found=1; next }
+            found && $0 ~ "^## \[" { exit }
+            found { print }
+          ' CHANGELOG.md >> "${OUT}"
+
+          # Fail if section not found
+          if [ "$(wc -l < "${OUT}")" -le 2 ]; then
+            echo "ERROR: Could not extract release notes for version ${VER} from CHANGELOG.md" >&2
+            exit 1
+          fi
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ env.OUT }}
+          body_path: RELEASE_NOTES.md
+          generate_release_notes: false

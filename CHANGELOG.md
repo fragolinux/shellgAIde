@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.1] - 2025-12-24
+
+### Docs & GitHub Pages
+
+- README expanded with a TL;DR and an explanation of the project name (**shellgAIde**).
+- Added common GitHub badges (CI, Pages, release, license).
+- GitHub Pages is now generated from `README.md`, keeping the website and README aligned.
+
+### Release notes automation
+
+- Release workflow now extracts the matching section from `CHANGELOG.md` and uses it as the GitHub Release notes.
+
 ## [1.0.0] - 2025-12-24
 
 ### Initial release
@@ -14,3 +26,4 @@ This initial public release includes:
 - Bats-based test suite
 - Makefile-driven UX
 - CI-ready non-interactive gate (`make ci-only`)
+
