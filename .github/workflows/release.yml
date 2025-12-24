@@ -19,28 +19,33 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          TAG="${GITHUB_REF_NAME}"
-          VER="${TAG#v}"
-          OUT="RELEASE_NOTES.md"
+          ver="${GITHUB_REF_NAME#v}"
 
-          echo "# ${TAG}" > "${OUT}"
-          echo "" >> "${OUT}"
+          # Estrae dal titolo della sezione fino alla prossima sezione "## ["
+          # Accetta sia [1.0.1] che [v1.0.1]
+          awk -v ver="$ver" '
+            BEGIN{found=0}
+            $0 ~ "^##[[:space:]]+\\[v?" ver "\\]" {found=1}
+            found {print}
+            found && NR>1 && $0 ~ "^##[[:space:]]+\\[" && $0 !~ "^##[[:space:]]+\\[v?" ver "\\]" {exit}
+            END{ if(!found) exit 42 }
+          ' CHANGELOG.md > release-notes.md
 
-          awk -v ver="${VER}" '
-            $0 ~ "^## \[[0-9]" { }
-            $0 ~ "^## \["ver"\]" { found=1; next }
-            found && $0 ~ "^## \[" { exit }
-            found { print }
-          ' CHANGELOG.md >> "${OUT}"
-
-          # Fail if section not found
-          if [ "$(wc -l < "${OUT}")" -le 2 ]; then
-            echo "ERROR: Could not extract release notes for version ${VER} from CHANGELOG.md" >&2
-            exit 1
+          # rimuove l’ultima riga se è l’header della sezione successiva
+          if tail -n 1 release-notes.md | grep -qE '^##[[:space:]]+\['; then
+            head -n -1 release-notes.md > release-notes.tmp && mv release-notes.tmp release-notes.md
           fi
 
+          echo "---- release-notes.md ----"
+          cat release-notes.md
+
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          body_path: RELEASE_NOTES.md
-          generate_release_notes: false
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            --title "${GITHUB_REF_NAME}" \
+            --notes-file release-notes.md \
+            --verify-tag \
+            --latest \
+            --clobber
