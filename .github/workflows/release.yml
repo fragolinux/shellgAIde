@@ -25,9 +25,9 @@ jobs:
           # Accetta sia [1.0.1] che [v1.0.1]
           awk -v ver="$ver" '
             BEGIN{found=0}
-            $0 ~ "^##[[:space:]]+\\[v?" ver "\\]" {found=1}
+            $0 ~ "^##[[:space:]]+[[]v?" ver "[]]" {found=1; print; next}
+            found && $0 ~ "^##[[:space:]]+[[]" {exit}
             found {print}
-            found && NR>1 && $0 ~ "^##[[:space:]]+\\[" && $0 !~ "^##[[:space:]]+\\[v?" ver "\\]" {exit}
             END{ if(!found) exit 42 }
           ' CHANGELOG.md > release-notes.md
 
@@ -43,9 +43,13 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" \
-            --title "${GITHUB_REF_NAME}" \
-            --notes-file release-notes.md \
-            --verify-tag \
-            --latest \
-            --clobber
+          \
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            gh release edit "${GITHUB_REF_NAME}" \
+              --title "${GITHUB_REF_NAME}" \
+              --notes-file release-notes.md
+          else
+            gh release create "${GITHUB_REF_NAME}" \
+              --title "${GITHUB_REF_NAME}" \
+              --notes-file release-notes.md
+          fi \

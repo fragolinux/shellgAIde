@@ -2,6 +2,8 @@
 
 Deterministic **GNU-first** shell toolchain inspired by the Google Shell Style Guide, with CI-safe workflows and an interactive toolchain shell.
 
+Reference: [Google Shell Style Guide](https://google.github.io/styleguide/shellguide.html).
+
 [![CI](https://github.com/fragolinux/shellgAIde/actions/workflows/ci.yml/badge.svg)](https://github.com/fragolinux/shellgAIde/actions/workflows/ci.yml)
 [![Pages](https://github.com/fragolinux/shellgAIde/actions/workflows/pages.yml/badge.svg)](https://github.com/fragolinux/shellgAIde/actions/workflows/pages.yml)
 [![Release](https://img.shields.io/github/v/release/fragolinux/shellgAIde?sort=semver)](https://github.com/fragolinux/shellgAIde/releases)
