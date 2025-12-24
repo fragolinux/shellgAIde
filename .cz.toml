@@ -1,6 +1,6 @@
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "1.0.1"
+version = "1.0.2"
 tag_format = "v$version"
 bump_message = "chore(release): v$new_version"
 annotated_tag = true
@@ -11,3 +11,6 @@ version_files = [
 ]
 changelog_file = "CHANGELOG.md"
 update_changelog_on_bump = true
+changelog_sections = [
+  "feat", "fix", "perf", "refactor", "docs", "test", "build", "ci", "chore"
+]

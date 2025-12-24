@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.2 (2025-12-25)
+
+- **release**: add commitizen setup and update release docs
+
 ## v1.0.1 (2025-12-24)
 
 ### Docs & GitHub Pages
