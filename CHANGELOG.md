@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.1] - 2025-12-24
+## v1.0.1 (2025-12-24)
 
 ### Docs & GitHub Pages
 
@@ -12,7 +12,12 @@
 
 - Release workflow now extracts the matching section from `CHANGELOG.md` and uses it as the GitHub Release notes.
 
-## [1.0.0] - 2025-12-24
+### Fix
+
+- **release**: generate notes from CHANGELOG
+- **release**: extract notes from CHANGELOG reliably
+
+## v1.0.0 (2025-12-24)
 
 ### Initial release
 
@@ -27,3 +32,10 @@ This initial public release includes:
 - Makefile-driven UX
 - CI-ready non-interactive gate (`make ci-only`)
 
+## v{version} (2025-12-25)
+
+### Fix
+
+- **release**: add commitizen setup and update release docs
+- **release**: generate notes from CHANGELOG
+- **release**: extract notes from CHANGELOG reliably

@@ -21,18 +21,18 @@ jobs:
           set -euo pipefail
           ver="${GITHUB_REF_NAME#v}"
 
-          # Estrae dal titolo della sezione fino alla prossima sezione "## ["
-          # Accetta sia [1.0.1] che [v1.0.1]
+          # Estrae dal titolo della sezione fino alla prossima sezione "##".
+          # Accetta: "## [1.0.1] - 2025-12-24", "## v1.0.1 (2025-12-24)", "## 1.0.1".
           awk -v ver="$ver" '
             BEGIN{found=0}
-            $0 ~ "^##[[:space:]]+[[]v?" ver "[]]" {found=1; print; next}
-            found && $0 ~ "^##[[:space:]]+[[]" {exit}
+            $0 ~ "^##[[:space:]]+[[]?v?" ver "[]]?([[:space:]]+.*)?$" {found=1; print; next}
+            found && $0 ~ "^##[[:space:]]+" {exit}
             found {print}
             END{ if(!found) exit 42 }
           ' CHANGELOG.md > release-notes.md
 
           # rimuove l’ultima riga se è l’header della sezione successiva
-          if tail -n 1 release-notes.md | grep -qE '^##[[:space:]]+\['; then
+          if tail -n 1 release-notes.md | grep -qE '^##[[:space:]]+'; then
             head -n -1 release-notes.md > release-notes.tmp && mv release-notes.tmp release-notes.md
           fi
 
