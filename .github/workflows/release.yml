@@ -1,0 +1,29 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build release archive
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME}"
+          OUT="shellgAIde-${TAG}.zip"
+          git archive --format=zip --output "${OUT}" "${TAG}"
+          echo "OUT=${OUT}" >> "$GITHUB_ENV"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.OUT }}

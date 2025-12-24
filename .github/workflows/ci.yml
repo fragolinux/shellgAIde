@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    name: ci (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # GitHub macOS runners default to Bash 3.x at /bin/bash.
+      # This repo requires Bash >= 5, so we install Homebrew bash
+      # and force Make to use it for all scripts.
+      - name: Prepare Bash 5 (macOS)
+        if: matrix.os == 'macos-latest'
+        shell: bash
+        run: |
+          set -euo pipefail
+          brew update
+          brew install bash
+          echo "BASH_BIN=$(brew --prefix bash)/bin/bash" >> "$GITHUB_ENV"
+
+      - name: Prepare Bash (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "BASH_BIN=bash" >> "$GITHUB_ENV"
+
+      - name: Show versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Runner: $RUNNER_OS"
+          echo "BASH_BIN: ${BASH_BIN}"
+          "${BASH_BIN}" --version | head -n 1
+          make --version | head -n 1
+
+      - name: CI (unattended)
+        shell: bash
+        run: |
+          set -euo pipefail
+          make ci-only BASH="${BASH_BIN}" LINT_PATH=.
