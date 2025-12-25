@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.6 (2025-12-25)
+
+### CI
+
+- **docs**: silence macos bash warning; fix ai-config links
+
 ## v1.0.5 (2025-12-25)
 
 ### CI
