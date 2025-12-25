@@ -1,3 +1,8 @@
+---
+layout: default
+title: AI Agent Configuration
+---
+
 # AI Agent Configuration
 
 This repo keeps a single canonical prompt in `PROMPT_SYSTEM.md` and all agent

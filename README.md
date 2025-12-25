@@ -86,8 +86,8 @@ make ci
 
 ## Applying the system prompt (AI agents)
 
-See `docs/ai-config.md` for the minimal file locations and contents used by
-each agent.
+See [docs/ai-config.md](docs/ai-config.md) for the minimal file locations and
+contents used by each agent.
 
 ### Verify output with this toolchain
 

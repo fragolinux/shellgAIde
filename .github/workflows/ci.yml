@@ -28,7 +28,9 @@ jobs:
         run: |
           set -euo pipefail
           brew update
-          brew install bash
+          if ! brew list --versions bash >/dev/null 2>&1; then
+            brew install bash
+          fi
           echo "BASH_BIN=$(brew --prefix bash)/bin/bash" >> "$GITHUB_ENV"
 
       - name: Prepare Bash (Linux)
