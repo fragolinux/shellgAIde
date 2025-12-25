@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.0.4 (2025-12-25)
+
+### Docs
+
+- **agents**: consolidate ai agent config
+
+### Chore
+
+- **release**: add release helper scripts
+
 ## v1.0.3 (2025-12-25)
 
 ### CI
