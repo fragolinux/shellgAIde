@@ -189,7 +189,10 @@ align_macos() {
   root="$(cd "${script_dir}/.." && pwd)"
 
   info "Installing GNU userland + linters via Homebrew..."
-  brew install coreutils findutils grep gnu-sed gawk bash shellcheck shfmt bats-core
+  if ! brew list --versions bash >/dev/null 2>&1; then
+    brew install bash
+  fi
+  brew install coreutils findutils grep gnu-sed gawk shellcheck shfmt bats-core
 
   local brew_pfx
   brew_pfx="$(brew_prefix)"

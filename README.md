@@ -86,8 +86,10 @@ make ci
 
 ## Applying the system prompt (AI agents)
 
-See [docs/ai-config.md](docs/ai-config.md) for the minimal file locations and
-contents used by each agent.
+See [AI agent configuration](docs/ai-config.md) for the minimal file locations
+and contents used by each agent.
+For the published page, use:
+`https://fragolinux.github.io/shellgAIde/ai-config.html`.
 
 ### Verify output with this toolchain
 
