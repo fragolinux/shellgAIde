@@ -159,6 +159,22 @@ Badges improve trust and visibility without affecting behavior.
 
 ---
 
+## 9. Direnv Auto-Load (Optional)
+
+### Context
+Some contributors prefer automatic activation of the GNU-first environment
+without running `source .toolchain/env.sh` manually.
+
+### Proposed approach
+- Provide an optional `.envrc` that sources `.toolchain/env.sh`.
+- Document `direnv allow` as a one-time enablement step.
+
+### Notes
+- Keep `.envrc` under version control only if the whole team wants it.
+- This remains opt-in; it must not replace explicit `make shell` usage.
+
+---
+
 This document is intentionally separate from the README.
 The README describes **how to use the toolchain today**.
 This file describes **how it may evolve tomorrow**.

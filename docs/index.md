@@ -4,3 +4,5 @@ title: shellgAIde
 ---
 
 This page is generated from `README.md` by the Pages workflow.
+
+See [AI agent configuration](ai-config.md).

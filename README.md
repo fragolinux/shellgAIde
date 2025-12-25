@@ -84,44 +84,10 @@ make ci
 > On macOS, you must source the environment after `make align` before running `make check` (unless you use `make shell`).
 
 
-## Applying the system prompt (ChatGPT, Codex, Copilot)
+## Applying the system prompt (AI agents)
 
-This repo includes a reusable system prompt in `PROMPT_SYSTEM.md`. Use it to **create new Bash scripts** or **refactor existing scripts** so they conform to:
-- Google Shell Style Guide (as a baseline)
-- ShellCheck-friendly patterns
-- This toolchain’s “GNU-first” portability requirements (macOS + Linux)
-
-### 1) ChatGPT
-
-Recommended approach:
-1. Create a ChatGPT **Project** (or use Custom Instructions) and paste the full content of `PROMPT_SYSTEM.md` into the project instructions.
-2. Ask for either:
-   - **a new script** (“Create a new script that does X”), or
-   - **a refactor** (“Refactor this script to conform to the system prompt; preserve behavior”).
-
-When refactoring, include:
-- The current script (full text).
-- Constraints (what must not change).
-- Any expected I/O examples (flags, env vars, exit codes).
-
-### 2) OpenAI Codex (CLI)
-
-Codex CLI supports repository instructions via `AGENTS.md`.
-Typical flow:
-1. Start Codex in the repo root.
-2. Run `/init` to create `AGENTS.md`.
-3. Paste the full content of `PROMPT_SYSTEM.md` into `AGENTS.md` (or summarize + include the non-negotiable rules).
-4. Ask Codex to create/refactor the script, then review and apply diffs.
-
-### 3) GitHub Copilot (VS Code / Visual Studio / JetBrains)
-
-Copilot supports repository custom instructions.
-Typical flow:
-1. Create `.github/copilot-instructions.md` in your target repo.
-2. Paste the full content of `PROMPT_SYSTEM.md` into that file (or a concise but complete adaptation).
-3. Use Copilot Chat to create/refactor scripts with the instructions applied automatically.
-
-> Note: Copilot instruction support may vary by IDE and requires the feature to be enabled.
+See `docs/ai-config.md` for the minimal file locations and contents used by
+each agent.
 
 ### Verify output with this toolchain
 
@@ -300,29 +266,6 @@ This repo includes a Pages workflow that publishes `docs/` to GitHub Pages.
 - Enable Pages in repo settings (Actions-based deployment or Pages from workflow).
 - After pushing to `main`, the site will be available under `https://<owner>.github.io/<repo>/`.
 
-
-
-## Optional: direnv (recommended evolution)
-
-`direnv` can automatically load the toolchain environment when you `cd` into the repository,
-so you never forget to `source .toolchain/env.sh`.
-
-A common pattern is:
-- create `.envrc` that sources `.toolchain/env.sh`
-- run `direnv allow` once
-
-Example `.envrc`:
-```bash
-source .toolchain/env.sh
-```
-
-Why it's useful:
-- eliminates human error (no more "BSD sed by accident")
-- keeps your global shell configuration clean
-- works well in multi-repo environments
-
-If you adopt direnv, keep `.envrc` under version control **only if** you want this behavior for all contributors.
-Otherwise, document it and let developers opt in.
 
 
 ## Shell compatibility note (bash/zsh)
