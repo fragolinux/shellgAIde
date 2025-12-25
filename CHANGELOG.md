@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.7 (2025-12-25)
+
+### Docs
+
+- **agents**: restore manual setup guidance
+
 ## v1.0.6 (2025-12-25)
 
 ### CI
