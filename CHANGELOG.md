@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.0.3 (2025-12-25)
+
+### CI
+
+- **commitizen**: include ci/docs in changelog and bump rules
+- **release**: add release artifacts and checksums
+
 ## v1.0.2 (2025-12-25)
 
 - **release**: add commitizen setup and update release docs
