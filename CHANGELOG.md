@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.5 (2025-12-25)
+
+### CI
+
+- **docs**: silence macos brew warning; publish ai-config page
+
 ## v1.0.4 (2025-12-25)
 
 ### Docs
