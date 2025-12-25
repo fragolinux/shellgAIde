@@ -14,29 +14,7 @@ Everything here is evaluated against the core principles:
 
 ---
 
-## 1. Automated Releases & Versioned Artifacts
-
-### Goal
-Produce **reproducible, traceable, verifiable release artifacts** with zero manual steps.
-
-### Recommended approach
-- Git tags are the **single source of truth** (`vMAJOR.MINOR.PATCH`).
-- On tag push:
-  - run full CI (Linux + macOS)
-  - build release archive:
-    - `gnu-first-shell-toolchain-vX.Y.Z-YYYYMMDD.zip`
-  - generate checksums (`SHA256SUMS`)
-  - optionally sign checksums (GPG or Sigstore)
-  - attach artifacts to a GitHub Release
-
-### Why this matters
-- No “hand-built” releases
-- Perfect traceability from commit → tag → artifact
-- Easy rollback and auditing
-
----
-
-## 2. Docker as an Optional Execution Environment
+## 1. Docker as an Optional Execution Environment
 
 ### Context
 The team uses:
@@ -85,34 +63,9 @@ Docker is justified **only if** it:
 
 ---
 
-## 3. Multi-Architecture Docker Images (If Implemented)
+## 2. Container Support Scope (If Implemented)
 
-If a Docker image is introduced, it MUST:
-
-- be built as a **multi-architecture manifest**
-- support at least:
-  - `linux/amd64`
-  - `linux/arm64`
-- expose **a single tag per version**
-  - no arch-specific tags required by users
-
-### Recommended implementation
-- Use GitHub Actions + Docker Buildx
-- Build on tag push:
-  ```bash
-  docker buildx build     --platform linux/amd64,linux/arm64     --push     -t ghcr.io/<org>/<repo>:vX.Y.Z
-  ```
-
-### Why this is mandatory
-- macOS (arm64) and WSL (amd64) must behave identically
-- users should never care about architecture details
-- avoids tag explosion and human error
-
----
-
-## 4. Docker Image Scope Options
-
-If Docker support is added, choose ONE clearly:
+If Docker support is added, choose **one** scope:
 
 ### Option A — CI / Runner Image (recommended)
 - Purpose: run `make ci`
@@ -128,32 +81,24 @@ If Docker support is added, choose ONE clearly:
 - More maintenance
 - Overlaps with existing devcontainer setups
 
-Initial recommendation: **Option A only**.
+### Mandatory constraints
+- Multi-architecture manifest: `linux/amd64` + `linux/arm64`
+- Single tag per version (no arch-specific tags)
+- Built via GitHub Actions + Buildx on tag push
 
 ---
 
-## 5. DevContainers Integration
+## 3. DevContainers Integration
 
-### Why it fits well
-- Containers already guarantee GNU tools
-- Bash versioning is trivial
-- Reproducibility is high
-
-### Suggested improvements
+If DevContainers are added:
 - Provide a reference `.devcontainer/` configuration
 - Base on Debian/Ubuntu
 - Run `make check` in `postCreateCommand`
-
-### Caution
-CI must still run on:
-- Linux runners
-- macOS runners
-
-Containers should not become the sole source of truth.
+- Keep CI on Linux + macOS runners (containers are not the only source of truth)
 
 ---
 
-## 6. Machine-Readable Reports
+## 4. Machine-Readable Reports
 
 ### Potential future needs
 - JSON or SARIF output for lint
@@ -169,7 +114,7 @@ All outputs must be:
 
 ---
 
-## 7. Pre-Commit Enforcement
+## 5. Pre-Commit Enforcement
 
 Possible future checks:
 - block commit if `.toolchain/env.sh` is not sourced
@@ -181,7 +126,7 @@ Can be implemented via:
 
 ---
 
-## 8. Signed Releases
+## 6. Signed Releases
 
 ### Goal
 Allow consumers to verify authenticity.
@@ -192,7 +137,7 @@ Options:
 
 ---
 
-## 9. Policy-Aware Linting
+## 7. Policy-Aware Linting
 
 Different rule sets per directory, e.g.:
 - `scripts/ci/`: stricter rules
@@ -202,7 +147,7 @@ Still enforced by the same engine.
 
 ---
 
-## 10. Repository Badges
+## 8. Repository Badges
 
 Recommended badges:
 - CI status (Linux + macOS)

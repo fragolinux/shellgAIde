@@ -39,6 +39,21 @@ jobs:
           echo "---- release-notes.md ----"
           cat release-notes.md
 
+      - name: Build release artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          ver="${GITHUB_REF_NAME#v}"
+          date_utc="$(date -u +%Y%m%d)"
+          base="shellgAIde-v${ver}-${date_utc}"
+          zip="${base}.zip"
+
+          git archive --format=zip --output "${zip}" "${GITHUB_REF_NAME}"
+          sha256sum "${zip}" > SHA256SUMS
+
+          echo "RELEASE_ZIP=${zip}" >> "${GITHUB_ENV}"
+          echo "RELEASE_SHA=SHA256SUMS" >> "${GITHUB_ENV}"
+
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -48,8 +63,12 @@ jobs:
             gh release edit "${GITHUB_REF_NAME}" \
               --title "${GITHUB_REF_NAME}" \
               --notes-file release-notes.md
+            gh release upload "${GITHUB_REF_NAME}" \
+              "${RELEASE_ZIP}" "${RELEASE_SHA}" \
+              --clobber
           else
             gh release create "${GITHUB_REF_NAME}" \
               --title "${GITHUB_REF_NAME}" \
-              --notes-file release-notes.md
+              --notes-file release-notes.md \
+              "${RELEASE_ZIP}" "${RELEASE_SHA}"
           fi \
