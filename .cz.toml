@@ -1,5 +1,5 @@
 [tool.commitizen]
-name = "cz_conventional_commits"
+name = "cz_customize"
 version = "1.0.2"
 tag_format = "v$version"
 bump_message = "chore(release): v$new_version"
@@ -11,6 +11,34 @@ version_files = [
 ]
 changelog_file = "CHANGELOG.md"
 update_changelog_on_bump = true
-changelog_sections = [
-  "feat", "fix", "perf", "refactor", "docs", "test", "build", "ci", "chore"
+
+[tool.commitizen.customize]
+message_template = "{{change_type}}{{'(' + scope + ')' if scope else ''}}{{'!' if is_breaking_change else ''}}: {{message}}{% if body %}\n\n{{body}}{% endif %}{% if footer %}\n\n{{footer}}{% endif %}"
+example = "ci(release): add release artifacts and checksums"
+schema = "<type>(<scope>): <subject>"
+schema_pattern = "^(feat|fix|refactor|perf|docs|style|test|build|ci|chore)(\\(.+\\))?(!)?:\\s.+"
+commit_parser = "^(?P<change_type>feat|fix|refactor|perf|docs|style|test|build|ci|chore)(\\((?P<scope>[^()\\r\\n]*)\\))?(?P<breaking>!)?:\\s(?P<message>.*)$"
+changelog_pattern = "^(feat|fix|refactor|perf|docs|style|test|build|ci|chore)(\\(.+\\))?(!)?:"
+bump_pattern = "^(feat|fix|refactor|perf|docs|style|test|build|ci|chore)(\\(.+\\))?(!)?:"
+bump_map = { feat = "MINOR", fix = "PATCH", refactor = "PATCH", perf = "PATCH", docs = "PATCH", style = "PATCH", test = "PATCH", build = "PATCH", ci = "PATCH", chore = "PATCH" }
+change_type_map = { feat = "Feat", fix = "Fix", refactor = "Refactor", perf = "Perf", docs = "Docs", style = "Style", test = "Test", build = "Build", ci = "CI", chore = "Chore" }
+change_type_order = ["Feat", "Fix", "Refactor", "Perf", "Docs", "Style", "Test", "Build", "CI", "Chore"]
+questions = [
+  { type = "list", name = "change_type", message = "Select the type of change you are committing", choices = [
+    { value = "fix", name = "fix: A bug fix (PATCH)" },
+    { value = "feat", name = "feat: A new feature (MINOR)" },
+    { value = "docs", name = "docs: Documentation only changes" },
+    { value = "style", name = "style: Formatting only (no behavior change)" },
+    { value = "refactor", name = "refactor: Neither fixes a bug nor adds a feature" },
+    { value = "perf", name = "perf: Performance improvement" },
+    { value = "test", name = "test: Adding or correcting tests" },
+    { value = "build", name = "build: Build system or external dependencies" },
+    { value = "ci", name = "ci: CI configuration or scripts" },
+    { value = "chore", name = "chore: Other changes" }
+  ]},
+  { type = "input", name = "scope", message = "Scope (optional):" },
+  { type = "confirm", name = "is_breaking_change", message = "Is it a breaking change?", default = false },
+  { type = "input", name = "message", message = "Subject:" },
+  { type = "input", name = "body", message = "Body (optional):" },
+  { type = "input", name = "footer", message = "Footer (optional):" }
 ]
