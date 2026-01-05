@@ -68,6 +68,10 @@ collect_files() {
       files+=("${p}")
     elif [[ -d "${p}" ]]; then
       while IFS= read -r -d '' f; do
+        # Skip intentional bad examples (copilot anti-patterns)
+        if [[ "${f}" =~ /bad_.*\.sh$ ]]; then
+          continue
+        fi
         files+=("${f}")
       done < <(find "${p}" -type f -name "*.sh" -print0)
     else
