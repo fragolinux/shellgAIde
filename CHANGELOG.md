@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.1.0 (2026-01-05)
+
+### Feat
+
+- **lint**: exclude bad_*.sh files from automated linting
+- **agents**: enhance copilot-instructions with agent metadata
+- **agents**: add reference examples for Copilot
+- **agents**: add GitHub Copilot custom agent
+
+### Docs
+
+- **future**: add DevContainer toolchain mount proposal
+- **readme**: update AI agent section for Copilot custom agent
+- **prompt**: add explicit shfmt formatting rules
+
 ## v1.0.7 (2025-12-25)
 
 ### Docs

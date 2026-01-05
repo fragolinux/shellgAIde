@@ -1,6 +1,6 @@
 [tool.commitizen]
 name = "cz_customize"
-version = "1.0.7"
+version = "1.1.0"
 tag_format = "v$version"
 bump_message = "chore(release): v$new_version"
 annotated_tag = true
