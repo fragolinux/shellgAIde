@@ -127,8 +127,27 @@ Executable code outside functions is forbidden (except setup).
 
 - Indentation: 2 spaces
 - One command per line
-- No trailing whitespace
+- No trailing whitespace (including empty lines within functions)
 - Lines ≤ 80 characters (unless unavoidable)
+- No unnecessary line continuation (`\`) before pipe operators
+- Multi-line conditions: use `&&` or `||` at end of line WITHOUT backslash
+  - Correct:
+    ```bash
+    if [[ condition ]] &&
+      [[ another ]]; then
+    ```
+  - Wrong:
+    ```bash
+    if [[ condition ]] && \
+       [[ another ]]; then
+    ```
+- Redirections: space before, no space after (`<<<`, `>>>`, `<`, `>`)
+  - Correct: `<<<"${var}"`, `>/dev/null`
+  - Wrong: `<<< "${var}"`, `> /dev/null`
+- Case patterns: space around pipe (`|`)
+  - Correct: `-h | --help)`
+  - Wrong: `-h|--help)`
+- All scripts must pass `shfmt -i 2 -bn -ci -sr -d`
 
 ---
 
