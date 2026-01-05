@@ -86,10 +86,31 @@ make ci
 
 ## Applying the system prompt (AI agents)
 
-See [AI agent configuration](docs/ai-config.md) for the minimal file locations
-and contents used by each agent.
-For the published page, use:
-[https://fragolinux.github.io/shellgAIde/ai-config.html](https://fragolinux.github.io/shellgAIde/ai-config.html).
+This repo includes a complete custom agent for GitHub Copilot and other AI assistants.
+
+### GitHub Copilot (Recommended)
+
+**Built-in custom agent** for VS Code, JetBrains, and Visual Studio:
+
+The agent is pre-configured in [.github/copilot-instructions.md](.github/copilot-instructions.md) and automatically activates when working with `*.sh` files.
+
+**Usage:**
+```
+# In Copilot Chat:
+"Create a script that processes log files"
+"Refactor this to be GNU-first compliant"
+"Explain the violations in this script"
+```
+
+**Reference examples:** [.github/copilot-examples/](.github/copilot-examples/)
+
+**Technical details:** [.github/copilot-agent-spec.md](.github/copilot-agent-spec.md)
+
+### Other AI Tools
+
+For ChatGPT, Codex CLI, Gemini, Claude, and configuration details, see:
+- **Local docs:** [docs/ai-config.md](docs/ai-config.md)
+- **Published page:** [https://fragolinux.github.io/shellgAIde/ai-config.html](https://fragolinux.github.io/shellgAIde/ai-config.html)
 
 ### Verify output with this toolchain
 
