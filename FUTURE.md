@@ -178,3 +178,41 @@ without running `source .toolchain/env.sh` manually.
 This document is intentionally separate from the README.
 The README describes **how to use the toolchain today**.
 This file describes **how it may evolve tomorrow**.
+
+---
+
+## 10. DevContainer Toolchain Mounts (Read-Only)
+
+### Context
+Multiple repositories already use DevContainers (mixed stacks: Java, Node, Helm,
+and infra code). Those repos must keep their own Commitizen setup, Jira-linked
+plugins, and release/bump scripts unchanged.
+
+### Goal
+Expose only the toolchain (prompt + agent config) across DevContainers without
+copying files into each repo and without modifying their commit workflows.
+
+### Proposed approach
+- Mount this repo into each DevContainer **read-only** (e.g., `/opt/shellgaide`).
+- Export `PATH` and toolchain config vars from the container config.
+- Make prompt activation **opt-in** via an explicit env flag.
+- Provide wrapper commands that set default paths (no manual `LINT_PATH`).
+
+### Command and Makefile ergonomics
+- Prefer wrapper commands in `bin/` that set:
+  - `SHELLGAIDE_HOME`
+  - `SHELLGAIDE_CONFIG`
+  - `LINT_PATH`
+- Provide a `shellgaide-make` wrapper that runs:
+  - `make -C "$SHELLGAIDE_HOME" <target>`
+  - avoids touching host repo Makefiles
+
+### Non-goals / constraints
+- Do not alter Commitizen (`cz`) behavior in host repos.
+- Do not move or duplicate release/bump scripts into other repos.
+- No changes to repo prompts unless explicitly enabled.
+
+### Variants
+- Use `docker-compose.override.yml` or a DevContainer feature to keep base
+  configs unchanged.
+- Optionally pin the mounted toolchain by tag/commit if stability is required.
