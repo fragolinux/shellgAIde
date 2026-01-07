@@ -94,6 +94,10 @@ This repo includes a complete custom agent for GitHub Copilot and other AI assis
 
 The agent is pre-configured in [.github/copilot-instructions.md](.github/copilot-instructions.md) and automatically activates when working with `*.sh` files.
 
+This repo also includes an archetype-style setup:
+- **Instructions:** [.github/instructions/shellgaide-gnu-bash.instructions.md](.github/instructions/shellgaide-gnu-bash.instructions.md)
+- **Prompt (targets the agent):** [.github/prompts/shellgaide-generate-gnu-bash-script.prompt.md](.github/prompts/shellgaide-generate-gnu-bash-script.prompt.md)
+
 **Usage:**
 ```
 # In Copilot Chat:
