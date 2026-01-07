@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.0 (2026-01-07)
+
+### Feat
+
+- **agents**: add GNU-first Bash instructions and prompt
+
 ## v1.1.0 (2026-01-05)
 
 ### Feat
